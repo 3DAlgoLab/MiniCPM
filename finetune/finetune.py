@@ -6,8 +6,7 @@ from typing import Dict, Optional
 import torch
 import transformers
 from torch.utils.data import Dataset
-from transformers import (AutoModelForCausalLM, AutoTokenizer, Trainer,
-                          TrainingArguments)
+from transformers import AutoModelForCausalLM, AutoTokenizer, Trainer, TrainingArguments
 
 
 @dataclass
@@ -87,10 +86,9 @@ class SupervisedDataset(Dataset):
                 ] * len(content_ids)
             else:
                 input_ids += self.assistant_tokens + content_ids
-                label_ids += (
-                    [self.ignore_index] * len(self.assistant_tokens)
-                    + content_ids
-                )
+                label_ids += [self.ignore_index] * len(
+                    self.assistant_tokens
+                ) + content_ids
 
         input_ids.append(self.tokenizer.eos_token_id)
         label_ids.append(self.tokenizer.eos_token_id)
@@ -164,7 +162,7 @@ def load_model_and_tokenizer(
 if __name__ == "__main__":
     model_path = "/mnt/data/user/tc_agi/yh/models/MiniCPM"
     parser = transformers.HfArgumentParser(
-        (ModelArguments, DataArguments, TrainingArguments)
+        (ModelArguments, DataArguments, TrainingArguments)  # type: ignore
     )
     model_args, data_args, training_args = parser.parse_args_into_dataclasses()
     model, tokenizer = load_model_and_tokenizer(
@@ -194,4 +192,4 @@ if __name__ == "__main__":
 
     trainer.train()
     # save the incremental PEFT weights, more details can be found in https://huggingface.co/blog/peft
-    # model.save_pretrained("output_dir") 
+    # model.save_pretrained("output_dir")

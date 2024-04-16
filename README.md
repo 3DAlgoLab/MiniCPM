@@ -1,112 +1,105 @@
 <div align="center">
 <h1>
-  MiniCPM: 揭示端侧大语言模型的无限潜力
+  MiniCPM: Unveiling the Potential of End-side Large Language Models
 </h1>
 </div>
 
-<h4 align="center">
-    <p>
-        <b>中文</b> | <a href="https://github.com/OpenBMB/MiniCPM/blob/main/README-en.md">English</a>
-    <p>
-</h4>
-
-
 <p align="center">
-<a href="https://openbmb.vercel.app/?category=Chinese+Blog" target="_blank">MiniCPM 技术博客</a> |
-<a href="https://arxiv.org/abs/2404.06395" target="_blank">MiniCPM 论文</a> |
-<a href="https://github.com/OpenBMB/MiniCPM-V/" target="_blank">MiniCPM-V 仓库</a> |
-加入我们的 <a href="https://discord.gg/3cGQn9b3YM" target="_blank">discord</a> 和 <a href="https://github.com/OpenBMB/MiniCPM/blob/main/assets/wechat.jpg" target="_blank">微信群</a>
- 
+<a href="https://openbmb.vercel.app/" target="_blank">Technical Blog</a> |
+<a href="https://arxiv.org/abs/2404.06395" target="_blank">MiniCPM Paper</a> |
+<a href="https://github.com/OpenBMB/MiniCPM-V/" target="_blank">MiniCPM-V Repo</a> |
+Join our <a href="https://discord.gg/3cGQn9b3YM" target="_blank">discord</a> and <a href="https://github.com/OpenBMB/MiniCPM/blob/main/assets/wechat.jpg" target="_blank">WeChat</a>
 </p>
 
-MiniCPM 是面壁智能与清华大学自然语言处理实验室共同开源的系列端侧大模型，主体语言模型 MiniCPM-2B 仅有 24亿（2.4B）的非词嵌入参数量, 总计2.7B参数量。
-- 经过 SFT 后，MiniCPM-2B 在公开综合性评测集上与 Mistral-7B 表现相近（中文、数学、代码能力更优），整体性能超越 Llama2-13B、MPT-30B、Falcon-40B 等模型。
-- 经过 DPO 后，MiniCPM-2B 在当前最接近用户体感的评测集 MTBench 上也超越了 Llama2-70B-Chat、Vicuna-33B、Mistral-7B-Instruct-v0.1、Zephyr-7B-alpha 等众多代表性开源大模型。
-- 以 MiniCPM-2B 为基础构建端侧多模态大模型 MiniCPM-V 2.0，在多个测试基准中实现了 7B 以下模型的最佳性能，在 OpenCompass 榜单上超过了 Qwen-VL-Chat 9.6B、CogVLM-Chat 17.4B 和 Yi-VL 34B 等更大参数规模的模型。MiniCPM-V 2.0 还展现出领先的 OCR 能力，在场景文字识别能力上接近 Gemini Pro。
-- 经过 Int4 量化后，MiniCPM 可在手机上进行部署推理，流式输出速度略高于人类说话速度。MiniCPM-V 也直接跑通了多模态大模型在手机上的部署。
-- 一张1080/2080可高效参数微调，一张3090/4090可全参数微调，一台机器可持续训练 MiniCPM，二次开发成本较低。
+MiniCPM is an End-Side LLM developed by ModelBest Inc. and TsinghuaNLP, with only 2.4B parameters excluding embeddings (2.7B in total).
 
-我们完全开源MiniCPM系列的模型参数供学术研究和有限商用。
-具体而言，我们目前已公开以下模型，地址详见 [模型下载](#1) 部分
-- 基于MiniCPM-2B的指令微调与人类偏好对齐版本**MiniCPM-2B-SFT/DPO**。
-- 基于MiniCPM-2B的多模态模型**MiniCPM-V 2.0**。
-- MiniCPM-2B-SFT/DPO的Int4量化版**MiniCPM-2B-SFT/DPO-Int4**。
-- MiniCPM-2B的128k长文本版本**MiniCPM-2B-128k**。
-- MiniCPM-2B的MoE版本**MiniCPM-MoE-8x2B**。
-- 更轻量级的MiniCPM-1B指令微调版本**MiniCPM-1B-SFT**。
-- 基于MLC-LLM、LLMFarm开发的MiniCPM手机端程序，**文本及多模态模型均可在手机端进行推理**。
-- MiniCPM-2B训练过程中的[30个Checkpoints](https://huggingface.co/openbmb/MiniCPM-2B-history)供模型机理研究。
+- MiniCPM has very close performance compared with Mistral-7B on open-sourced general benchmarks with better ability on Chinese, Mathematics and Coding after SFT. The overall performance exceeds Llama2-13B, MPT-30B, Falcon-40B, etc.
+- After DPO, MiniCPM outperforms Llama2-70B-Chat, Vicuna-33B, Mistral-7B-Instruct-v0.1, Zephyr-7B-alpha, etc. on MTBench.
+- MiniCPM-V 2.0, based on MiniCPM-2B, achieves state-of-the-art performance on multiple benchmarks among models under 7B parameters. It even outperforms strong Qwen-VL-Chat 9.6B, CogVLM-Chat 17.4B, and Yi-VL 34B on OpenCompass. MiniCPM-V 2.0 also shows strong OCR capability, achieving comparable performance to Gemini Pro in scene-text understanding.
+- MiniCPM can be deployed and infer on smartphones, and the speed of streaming output is relatively higher than human verbal speed. MiniCPM-V has also successfully deployed multi-modal models on smartphones.
+- The cost of developing based on MiniCPM is low. Parameter efficient finetuning can be conducted with a single 1080/2080 GPU and full parameter finetuning can be conducted with a 3090/4090 GPU.
 
-### 局限性：
+We release all model parameters for research and limited commercial use.
 
-- 受限于模型规模，模型可能出现**幻觉性问题**。其中由于DPO模型生成的回复内容更长，更容易出现幻觉。我们也将持续进行MiniCPM模型的迭代改进。
-- 为了保证在学术研究用途上模型的通用性，我们**未对模型进行任何身份认同训练**。同时由于我们用ShareGPT开源语料作为部分训练数据，模型可能会输出类似GPT系列模型的身份认同信息。
-- 受限于模型规模，模型的**输出受到提示词（prompt）的影响较大**，可能多次尝试产生不一致的结果。
-- 受限于模型容量，模型的**知识记忆较不准确**，后续我们将结合RAG方法来增强模型的知识记忆能力。
+- SFT and DPO version based on MiniCPM-2B: **MiniCPM-2B-SFT/DPO**
+- The multi-modal model **MiniCPM-V 2.0** based on MiniCPM-2B.
+- The INT4 quantized version **MiniCPM-2B-SFT/DPO-Int4** based on MiniCPM-2B-SFT/DPO
+- The 128k long context version of MiniCPM-2B: **MiniCPM-2B-128k**.
+- The MoE version of MiniCPM-2B: **MiniCPM-MoE-8x2B**.
+- SFT version of MiniCPM-1B, a lighter-weight model: **MiniCPM-1B-SFT**.
+- Mobile phone application based on MLC-LLM and LLMFarm. Both language model and multimodel model can conduct inference on smartphones.
+- 30 Intermidiate [checkpoints](https://huggingface.co/openbmb/MiniCPM-2B-history) of MiniCPM-2B for academic purpose.
 
-## 目录
+### Limitations
 
-- [更新日志](#0)
-- [模型下载](#1)
-- [快速上手](#2)
-- [开源社区](#community)
-- [评测结果](#3)
-- [手机部署](#4)
-- [Demo & API 部署](#5)
-- [二次开发](#6)
-- [开源协议](#7)
-- [工作引用](#8)
-- [典型示例](#9)
+- Due to limitations in model size, the model may experience hallucinatory issues. As DPO model tend to generate longer response, hallucinations are more likely to occur. We will also continue to iterate and improve the MiniCPM model.
+- To ensure the generality of the model for academic research purposes, we have not subject it to any identity-specific training. Meanwhile, as we use ShareGPT open-source corpus as part of the training data, the model may output identity-related information similar to the GPT series models.
+- Due to the limitation of model size, the output of the model is greatly influenced by prompts, which may result in inconsistent results from multiple attempts.
+- Due to limited model capacity, the model's knowledge recall may not be accurate. In the future, we will combine the RAG method to enhance the model's knowledge retention ability.
+
+## Quick Links
+
+- [Updates](#0)
+- [Downloading](#1)
+- [Quick Start](#2)
+- [Community](#community)
+- [Benchmark](#3)
+- [Deployment on Mobile Phones](#4)
+- [Demo & API](#5)
+- [Fine-tuning Models](#6)
+- [LICENSE](#7)
+- [Citation](#8)
+- [Show Cases](#9)
 
 <p id="0"></p>
 
-## 更新日志
-- **2024/04/11 开源[MiniCPM-V-2.0](https://huggingface.co/openbmb/MiniCPM-V-2.0)、[MiniCPM-2B-128k](https://huggingface.co/openbmb/MiniCPM-2B-128k)、[MiniCPM-MoE-8x2B](https://huggingface.co/openbmb/MiniCPM-MoE-8x2B)和[MiniCPM-1B](https://huggingface.co/openbmb/MiniCPM-1B-sft-bf16)！点击[这里](https://openbmb.vercel.app/?category=Chinese+Blog)查看技术博客。** 
-- 2024/03/16 MiniCPM-2B 的30余个中间检查点开放了！[HuggingFace链接](https://huggingface.co/openbmb/MiniCPM-2B-history)
-- 2024/02/13 支持了llama.cpp
-- 2024/02/09 我们在README里加入了一个[开源社区](#community)章节，用来收集开源社区对MiniCPM的支持案例。
-- 2024/02/08 我们更新了[llama-format的模型权重](#llamaformat)，方便大家更加快捷地使用我们的模型。
-- 2024/02/01 初始发布。
+## Update Log
+
+- **2024/04/11 We release [MiniCPM-V 2.0](https://huggingface.co/openbmb/MiniCPM-V-2.0), [MiniCPM-2B-128k](https://huggingface.co/openbmb/MiniCPM-2B-128k), [MiniCPM-MoE-8x2B](https://huggingface.co/openbmb/MiniCPM-MoE-8x2B) and [MiniCPM-1B](https://huggingface.co/openbmb/MiniCPM-1B-sft-bf16)! Click [here](https://openbmb.vercel.app/) to read our technical blog.**
+- 2024/03/16 Intermediate checkpoints were released [here](https://huggingface.co/openbmb/MiniCPM-2B-history)!
+- 2024/02/13 We support llama.cpp
+- 2024/02/09 We have included a [Community](#community) section in the README to encourage support for MiniCPM from the open-source community.
+- 2024/02/08 We updated the [llama-format model weights](#llamaformat), which can be loaded into LlamaModel directly, making it more convenient for everyone to use our model quickly.
+- 2024/02/01 Initial release.
 
 <p id="1"></p>
 
-## 模型下载
+## Downloading
 
-* 语言模型
- 
-  | HuggingFace | ModelScope | WiseModel | 
+- Language Model
+
+  | HuggingFace | ModelScope | WiseModel |
   |-------------|------------|-----------|
   |[MiniCPM-2B-sft-bf16](https://huggingface.co/openbmb/MiniCPM-2B-sft-bf16)|[MiniCPM-2B-sft-bf16](https://modelscope.cn/models/OpenBMB/miniCPM-bf16)|[MiniCPM-2B-sft-bf16](https://wisemodel.cn/models/OpenBMB/miniCPM-bf16)|
   |[MiniCPM-2B-dpo-bf16](https://huggingface.co/openbmb/MiniCPM-2B-dpo-bf16)|[MiniCPM-2B-dpo-bf16](https://modelscope.cn/models/OpenBMB/MiniCPM-2B-dpo-bf16/summary)|[MiniCPM-2B-dpo-bf16](https://wisemodel.cn/models/OpenBMB/MiniCPM-2B-dpo-bf16)|
-  |[MiniCPM-2B-128k](https://huggingface.co/openbmb/MiniCPM-2B-128k) |[MiniCPM-2B-128k](https://modelscope.cn/models/openbmb/MiniCPM-2B-128k/summary)| 
-  |[MiniCPM-MoE-8x2B](https://huggingface.co/openbmb/MiniCPM-MoE-8x2B) |[MiniCPM-MoE-8x2B](https://modelscope.cn/models/OpenBMB/MiniCPM-MoE-8x2B)| 
+  |[MiniCPM-2B-128k](https://huggingface.co/openbmb/MiniCPM-2B-128k) |[MiniCPM-2B-128k](https://modelscope.cn/models/openbmb/MiniCPM-2B-128k/summary)|
+  |[MiniCPM-MoE-8x2B](https://huggingface.co/openbmb/MiniCPM-MoE-8x2B) |[MiniCPM-MoE-8x2B](https://modelscope.cn/models/OpenBMB/MiniCPM-MoE-8x2B)|
   |[MiniCPM-1B-sft-bf16](https://huggingface.co/openbmb/MiniCPM-1B-sft-bf16) | [MiniCPM-1B-sft-bf16](https://modelscope.cn/models/OpenBMB/MiniCPM-1B-sft-bf16) |
 
-  注: 更多模型版本见[这里](https://huggingface.co/collections/openbmb/minicpm-2b-65d48bf958302b9fd25b698f)。
+  Note: More model versions can be found [here](https://huggingface.co/collections/openbmb/minicpm-2b-65d48bf958302b9fd25b698f).
 
+- Multimodel Model
 
-* 多模态模型
-  | HuggingFace | ModelScope | WiseModel |
-  |-------------|------------|-----------|
-  | [MiniCPM-V 2.0](https://huggingface.co/openbmb/MiniCPM-V-2) | [MiniCPM-V 2.0](https://modelscope.cn/models/OpenBMB/MiniCPM-V-2) |
-  | [MiniCPM-V](https://huggingface.co/openbmb/MiniCPM-V) | [MiniCPM-V](https://modelscope.cn/models/OpenBMB/MiniCPM-V/) | [MiniCPM-V](https://wisemodel.cn/models/OpenBMB/MiniCPM-V) |
-  | [OmniLMM-12B](https://huggingface.co/openbmb/OmniLMM-12B) | [OmniLMM-12B](https://modelscope.cn/models/OpenBMB/OmniLMM-12B) | [OmniLMM-12B](https://wisemodel.cn/models/OpenBMB/OmniLMM-12B) |
-
-  
-
+    | HuggingFace | ModelScope | WiseModel |
+    |-------------|------------|-----------|
+    | [MiniCPM-V 2.0](https://huggingface.co/openbmb/MiniCPM-V-2) | [MiniCPM-V 2.0](https://modelscope.cn/models/OpenBMB/MiniCPM-V-2) |
+    | [MiniCPM-V](https://huggingface.co/openbmb/MiniCPM-V) | [MiniCPM-V](https://modelscope.cn/models/OpenBMB/MiniCPM-V/) | [MiniCPM-V](https://wisemodel.cn/models/OpenBMB/MiniCPM-V) |
+    | [OmniLMM-12B](https://huggingface.co/openbmb/OmniLMM-12B) | [OmniLMM-12B](https://modelscope.cn/models/OpenBMB/OmniLMM-12B) | [OmniLMM-12B](https://wisemodel.cn/models/OpenBMB/OmniLMM-12B) |
 
 <p id="2"></p>
 
-## 快速上手
+## Quick Start
 
-#### 在线体验
+#### Online
 
 - [Colab](https://colab.research.google.com/drive/1tJcfPyWGWA5HezO7GKLeyeIso0HyOc0l?usp=sharing)
 
-#### Huggingface 模型
+#### Huggingface
 
 ##### MiniCPM-2B
-* 安装`transformers>=4.36.0`以及`accelerate`后，运行以下代码
+
+- Install `transformers>=4.36.0` and `accelerate`，run the following python code.
+
 ```python
 from transformers import AutoModelForCausalLM, AutoTokenizer
 import torch
@@ -116,21 +109,22 @@ path = 'openbmb/MiniCPM-2B-dpo-bf16'
 tokenizer = AutoTokenizer.from_pretrained(path)
 model = AutoModelForCausalLM.from_pretrained(path, torch_dtype=torch.bfloat16, device_map='cuda', trust_remote_code=True)
 
-responds, history = model.chat(tokenizer, "山东省最高的山是哪座山, 它比黄山高还是矮？差距多少？", temperature=0.5, top_p=0.8, repetition_penalty=1.02)
+responds, history = model.chat(tokenizer, "Which city is the capital of China?", temperature=0.8, top_p=0.8)
 print(responds)
 ```
 
-* 期望输出
-```shell
-山东省最高的山是泰山，海拔1545米。
+- Examples
 
-相对于黄山（海拔1864米），泰山海拔较低，相差约319米。
+```shell
+The capital city of China is Beijing. Beijing is not only the political center of China but also a cultural and economic hub. It is known for its rich history and numerous landmarks, such as the Great Wall, the Forbidden City, and the Temple of Heaven. The city is also home to the National Stadium, also known as the "Bird's Nest," and the National Aquatics Center, or "Water Cube." Beijing is a significant city in China, with a population of over 21 million people.
 ```
 
 <p id="llamaformat"></p>
 
-##### MiniCPM-2B （Llama Format）
-我们将MiniCPM的模型权重转化成了Llama代码可以直接调用的[格式](https://huggingface.co/openbmb/MiniCPM-2B-sft-bf16-llama-format)，以便大家尝试:
+##### MiniCPM-2B (Llama Format)
+
+To facilitate ease of use, we have converted the model weights of MiniCPM to adapt to the structure of the LLaMA model:
+
 ```python
 import torch
 from transformers import LlamaTokenizerFast, LlamaForCausalLM
@@ -139,10 +133,10 @@ tokenizer = LlamaTokenizerFast.from_pretrained(model_path)
 model = LlamaForCausalLM.from_pretrained(model_path, torch_dtype=torch.bfloat16, device_map='cuda', trust_remote_code=True)
 
 prompt="Now you act like a terminal situated within a beginner's C++ practice repository folder, please provide the output for the command: `ls -l`"
-input_ids = tokenizer.encode("<用户>{}<AI>".format(prompt), return_tensors='pt', add_special_tokens=True).cuda()
-responds = model.generate(input_ids, temperature=0.3, top_p=0.8, repetition_penalty=1.02, max_length=1024)
-responds = tokenizer.decode(responds[0], skip_special_tokens=True)
-print(responds)
+input_ids = tokenizer.encode("<User>{}<AI>".format(prompt), return_tensors='pt', add_special_tokens=True).cuda()
+responses = model.generate(input_ids, temperature=0.3, top_p=0.8, repetition_penalty=1.02, max_length=1024)
+responses = tokenizer.decode(responses[0], skip_special_tokens=True)
+print(responses)
 ```
 
 ##### MiniCPM-V
@@ -171,41 +165,40 @@ res, context, _ = model.chat(
 print(res)
 ```
 
+#### vLLM
 
-#### vLLM 推理
+- Install [vLLM](https://github.com/vllm-project/vllm) main: [build from source](https://docs.vllm.ai/en/latest/getting_started/installation.html#build-from-source)。
 
-* 安装[vLLM](https://github.com/vllm-project/vllm)主分支版本: [从源码安装](https://docs.vllm.ai/en/latest/getting_started/installation.html#build-from-source)。
+- Examples
 
-* 测试样例
-```shell
-python inference/inference_vllm.py --model_path <hf_repo_path> --prompt_path prompts/prompt_demo.txt
-```
+  ```shell
+  python inference/inference_vllm.py --model_path <hf_repo_path> --prompt_path prompts/prompt_demo.txt
+  ```
 
-* 期望输出
-```shell
-<用户>: Which city is the capital of China?
-<AI>:
- The capital city of China is Beijing. Beijing is a major political, cultural, and economic center in China, and it is known for its rich history, beautiful architecture, and vibrant nightlife. It is also home to many of China's most important cultural and historical sites, including the Forbidden City, the Great Wall of China, and the Temple of Heaven. Beijing is a popular destination for tourists from around the world, and it is an important hub for international business and trade.
-```
+#### llama.cpp, Ollama, fastllm, mlx_lm Inference
 
-#### llama.cpp、Ollama、fastllm、mlx_lm推理
-MiniCPM支持[llama.cpp](https://github.com/ggerganov/llama.cpp/) 、[ollama](https://github.com/ollama/ollama)、[fastllm](https://github.com/ztxz16/fastllm)、[mlx_lm](https://github.com/ml-explore/mlx-examples)推理。感谢[@runfuture](https://github.com/runfuture)对llama.cpp和ollama的适配。
+We have supported inference with [llama.cpp](https://github.com/ggerganov/llama.cpp/), [ollama](https://github.com/ollama/ollama), [fastllm](https://github.com/ztxz16/fastllm), [mlx_lm](https://github.com/ml-explore/mlx-examples). Thanks to [@runfuture](https://github.com/runfuture) for the adaptation of llama.cpp and ollama.
 
 **llama.cpp**
-1. [安装llama.cpp](https://github.com/ggerganov/llama.cpp?tab=readme-ov-file#build)
-2. 下载gguf形式的模型。[下载链接-fp16格式](https://huggingface.co/runfuture/MiniCPM-2B-dpo-fp16-gguf) [下载链接-q4km格式](https://huggingface.co/runfuture/MiniCPM-2B-dpo-q4km-gguf)
-3. 在命令行运行示例代码:
+
+1. [install llama.cpp](https://github.com/ggerganov/llama.cpp?tab=readme-ov-file#build)
+2. download model in gguf format. [link-fp16](https://huggingface.co/runfuture/MiniCPM-2B-dpo-fp16-gguf) [link-q4km](https://huggingface.co/runfuture/MiniCPM-2B-dpo-q4km-gguf)
+3. In command line:
+
 ```
-./main -m ../../model_ckpts/download_from_hf/MiniCPM-2B-dpo-fp16-gguf.gguf --prompt "<用户>写藏头诗，藏头是龙年大吉<AI>" --temp 0.3 --top-p 0.8 --repeat-penalty 1.05
+./main -m ../../model_ckpts/download_from_hf/MiniCPM-2B-dpo-fp16-gguf.gguf --prompt "<用户>Write an acrostic poem with the word MINICPM (One line per letter)<AI>" --temp 0.3 --top-p 0.8 --repeat-penalty 1.05
 ```
-更多参数调整[详见](https://github.com/ggerganov/llama.cpp/blob/master/examples/main/README.md)
+
+More parameters adjustment [see this](https://github.com/ggerganov/llama.cpp/blob/master/examples/main/README.md)
 
 **ollama**
-正在解决[这个问题](https://github.com/ollama/ollama/issues/2383)
+Solving [this issue](https://github.com/ollama/ollama/issues/2383)
 
 **fastllm**
-1. [编译安装fastllm](https://github.com/ztxz16/fastllm)
-2. 模型推理
+
+1. install [fastllm](https://github.com/ztxz16/fastllm)
+2. inference
+
 ```python
 import torch
 from transformers import AutoTokenizer, LlamaTokenizerFast, AutoModelForCausalLM
@@ -215,95 +208,98 @@ model = AutoModelForCausalLM.from_pretrained(path, torch_dtype=torch.float16, de
 from fastllm_pytools import llm
 llm.set_device_map("cpu")
 model = llm.from_hf(model, tokenizer, dtype = "float16") # dtype支持 "float16", "int8", "int4"
-print(model.response("<用户>山东省最高的山是哪座山, 它比黄山高还是矮？差距多少？<AI>", top_p=0.8, temperature=0.5, repeat_penalty=1.02))
+print(model.response("<用户>Write an acrostic poem with the word MINICPM (One line per letter)<AI>", top_p=0.8, temperature=0.5, repeat_penalty=1.02))
 ```
 
 **mlx_lm**
-1. 安装mlx_lm库
+
+1. install mlx_lm
+
     ```shell
     pip install mlx_lm
     ```
-2. 下载转换后的模型权重[MiniCPM-2B-sft-bf16-llama-format-mlx](https://huggingface.co/mlx-community/MiniCPM-2B-sft-bf16-llama-format-mlx)
-3. 模型推理
+
+2. download model weights [MiniCPM-2B-sft-bf16-llama-format-mlx](https://huggingface.co/mlx-community/MiniCPM-2B-sft-bf16-llama-format-mlx)
+3. inference
+
     ```shell
     python -m mlx_lm.generate --model mlx-community/MiniCPM-2B-sft-bf16-llama-format-mlx --prompt "hello, tell me a joke." --trust-remote-code
     ```
 
+<p id="Community"></p>
 
-<p id="community"></p>
+## Community
 
-## 开源社区
-
-- [ChatLLM框架](https://github.com/foldl/chatllm.cpp)：[在CPU上跑MiniCPM](https://huggingface.co/openbmb/MiniCPM-2B-dpo-bf16/discussions/2#65c59c4f27b8c11e43fc8796)
-
-
+- [ChatLLM](https://github.com/foldl/chatllm.cpp): [Run MiniCPM on CPU](https://huggingface.co/openbmb/MiniCPM-2B-dpo-bf16/discussions/2#65c59c4f27b8c11e43fc8796)
 
 <p id="3"></p>
 
-## 评测结果
+## Evaluation results
 
-#### 评测设置
+#### Evaluation Settings
 
-* 由于大模型评测难以统一，且大量评测也没有公开的prompt和测试代码，对于具体评测方式，我们只能尽量做到适合各类模型。
-* 整体而言，我们测试时采用统一的prompt输入，并按照各模型对应的模板进行输入调整。
-* **评测脚本及prompt已开源在我们的Github仓库中，也欢迎更多开发者来不断改进我们的评测方式。**
-  * 文本评测部分，采用了我们的开源大模型能力评测框架[UltraEval](https://github.com/OpenBMB/UltraEval)。以下为开源模型复现流程：
-    * 安装UltraEval
+- Since it is difficult to standardize the evaluation of LLMs and there is no public prompt and test code for a large number of evaluations, we can only try our best to make it suitable for all types of models in terms of specific evaluation methods.
+- Overall, we use a unified prompt input for testing, and adjust the input according to the corresponding template for each model.
+- **The evaluation scripts and prompts have been open-sourced in our Github repository, and we welcome more developers to continuously improve our evaluation methods.**
+  - For the text evaluation part, we use our open source large model capability evaluation framework [UltraEval](https://github.com/OpenBMB/UltraEval). The following is the open source model reproduction process:
+    - install UltraEval
+
       ```shell
       git clone https://github.com/OpenBMB/UltraEval.git
       cd UltraEval
       pip install -e .
       ```
-    * 下载相关数据并解压处理
+
+    - Download the relevant data and unzip it for processing
+
       ```shell
       wget -O RawData.zip "https://cloud.tsinghua.edu.cn/f/71b5232264ae4833a4d0/?dl=1"
       unzip RawData.zip
       python data_process.py
       ```
-    * 执行评测脚本(提供了模板，可自定义)
+
+    - Execute evaluation scripts (templates are provided and can be customized)
+
       ```shell
       bash run_eval.sh
       ```
 
-#### 部署模式
+#### Deployment mode
 
-* 因为MiniCPM采用Mup的结构，与现有模型在具体计算上有细微差别，我们是基于vllm=0.2.2版本进行了我们模型的实现。
-* **对于非MiniCPM模型，我们采用了vllm=0.2.7的最新版本进行推理。**
+- Because MiniCPM uses the structure of Mup, which is slightly different from existing models in terms of specific computations, we have based the implementation of our model on the vllm=0.2.2 version.
+- **For non-MiniCPM models, we directly sampled the latest version of vllm=0.2.7 for inference.**
 
-#### 评测度量
+#### Evaluation method
 
-* 对于QA任务（选择题任务），我们选用两种方式进行测试：
-  * PPL：将选项作为题目生成的延续，并根据各个选项的PPL来进行答案选择；
-  * 第二种是直接生成答案选项。
-* 对于不同模型，这两种方式得到的结果差异较大。MiniCPM两种模式上的结果较为接近，而Mistral-7B-v0.1等模型在PPL上表现较好，直接生成上效果较差。
-* 在具体评测时，我们以两种评测方式得分的最高者为最终结果，以此保证对比的公平性(以下表格中*号表示采用PPL)。
+- For the QA task (multiple-choice task), we chose to test in two ways:
+  - PPL: The options are used as a continuation of the question generation and the answer selection is based on the PPL of each option;
+  - The second is to generate the answer options directly.
+- For different models, the results obtained by these two approaches vary widely. the results on both MiniCPM models are closer, while models such as Mistral-7B-v0.1 perform better on PPL and worse on direct generation.
+- In the specific evaluation, we take the higher score of the two evaluation methods as the final result, so as to ensure the fairness of the comparison (* in the following table indicates the PPL).
 
-#### 文本模型评测
+#### Text evaluation
 
-**越级比较:**
-|模型|平均分|英文均分|中文均分|C-Eval|CMMLU|MMLU|HumanEval|MBPP|GSM8K|MATH|BBH|ARC-E|ARC-C|HellaSwag|
+|Model|Average Score|Average Score in English|Average Score in Chinese|C-Eval|CMMLU|MMLU|HumanEval|MBPP|GSM8K|MATH|BBH|ARC-E|ARC-C|HellaSwag|
 |-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|
 |Llama2-7B|35.40|36.21|31.765|32.42|31.11|44.32|12.2|27.17|13.57|1.8|33.23|75.25|42.75|75.62*|
 |Qwen-7B|49.46|47.19|59.655|58.96|60.35|57.65|17.07|42.15|41.24|5.34|37.75|83.42|64.76|75.32*|
-|Deepseek-7B|39.96|39.15|43.64|42.82|44.45|47.82|20.12|41.45|15.85|1.53|33.38|74.58*|42.15*|75.45*|
+|Deepseek-7B|39.96|39.15|43.635|42.82|44.45|47.82|20.12|41.45|15.85|1.53|33.38|74.58*|42.15*|75.45*|
 |Mistral-7B|48.97|49.96|44.54|46.12|42.96|62.69|27.44|45.2|33.13|5.0|41.06|83.92|70.73|80.43*|
 |Llama2-13B|41.48|42.44|37.19|37.32|37.06|54.71|17.07|32.55|21.15|2.25|37.92|78.87*|58.19|79.23*|
-|MPT-30B|38.17|39.82|30.72|29.34|32.09|46.56|21.95|35.36|10.31|1.56|38.22|78.66*|46.08*|79.72*|
+|MPT-30B|38.17|39.82|30.715|29.34|32.09|46.56|21.95|35.36|10.31|1.56|38.22|78.66*|46.08*|79.72*|
 |Falcon-40B|43.62|44.21|40.93|40.29|41.57|53.53|24.39|36.53|22.44|1.92|36.24|81.94*|57.68|83.26*|
 |MiniCPM-2B|52.33|52.6|51.1|51.13|51.07|53.46|50.00|47.31|53.83|10.24|36.87|85.44|68.00|68.25|
 
-**同级比较：**
-|模型|平均分|英文均分|中文均分|C-Eval|CMMLU|MMLU|HumanEval|MBPP|GSM8K|MATH|BBH|ARC-E|ARC-C|HellaSwag|
+|Model|Average Score|Average Score in English|Average Score in Chinese|C-Eval|CMMLU|MMLU|HumanEval|MBPP|GSM8K|MATH|BBH|ARC-E|ARC-C|HellaSwag|
 |-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|
 |TinyLlama-1.1B|25.36|25.55|24.525|25.02|24.03|24.3|6.71|19.91|2.27|0.74|28.78|60.77*|28.15*|58.33*|Qwen-1.8B|34.72|31.87|47.565|49.81|45.32|43.37|7.93|17.8|19.26|2.42|29.07|63.97*|43.69|59.28*|
-|Qwen-1.8B|34.72|31.87|47.57|49.81|45.32|43.37|7.93|17.80|19.26|2.42|29.07|63.97*|43.69|59.28*|
+|Qwen-1.8B|34.72|31.87|47.565|49.81|45.32|43.37|7.93|17.8|19.26|2.42|29.07|63.97*|43.69|59.28*|
 |Gemini Nano-3B|-|-|-|-|-|-|-|27.2(report)|22.8(report)|-|42.4(report)|-|-|-|
-|StableLM-Zephyr-3B|43.46|46.31|30.62|30.34|30.89|45.9|35.37|31.85|52.54|12.49|37.68|73.78|55.38|71.87*|
-|Phi-2-2B|48.84|54.41|23.78|23.37|24.18|52.66|47.56|55.04|57.16|3.5|43.39|86.11|71.25|73.07*|
-|MiniCPM-2B|52.33|52.6|51.10|51.13|51.07|53.46|50.00|47.31|53.83|10.24|36.87|85.44|68.00|68.25|
+|StableLM-Zephyr-3B|43.46|46.31|30.615|30.34|30.89|45.9|35.37|31.85|52.54|12.49|37.68|73.78|55.38|71.87*|
+|Phi-2-2B|48.84|54.41|23.775|23.37|24.18|52.66|47.56|55.04|57.16|3.5|43.39|86.11|71.25|73.07*|
+|MiniCPM-2B|52.33|52.6|51.1|51.13|51.07|53.46|50.00|47.31|53.83|10.24|36.87|85.44|68.00|68.25|
 
-**Chat模型比较：**
-|模型|平均分|英文均分|中文均分|C-Eval|CMMLU|MMLU|HumanEval|MBPP|GSM8K|MATH|BBH|ARC-E|ARC-C|HellaSwag|
+|Model|Average Score|Average Score in English|Average Score in Chinese|C-Eval|CMMLU|MMLU|HumanEval|MBPP|GSM8K|MATH|BBH|ARC-E|ARC-C|HellaSwag|
 |-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|
 |ChatGLM2-6B|37.98|35.17|50.63|52.05|49.21|45.77|10.37|9.38|22.74|5.96|32.6|74.45|56.82|58.48*|
 |Mistral-7B-Instruct-v0.1|44.36|45.89|37.51|38.06|36.96|53.56|29.27|39.34|28.73|3.48|39.52|81.61|63.99|73.47*|
@@ -313,25 +309,10 @@ print(model.response("<用户>山东省最高的山是哪座山, 它比黄山高
 |Baichuan2-7B-Chat|44.68|42.74|53.39|53.28|53.5|53|21.34|32.32|25.25|6.32|37.46|79.63|60.15|69.23*|
 |Deepseek-7B-chat|49.34|49.56|48.335|46.95|49.72|51.67|40.85|48.48|48.52|4.26|35.7|76.85|63.05|76.68*|
 |Llama2-7B-Chat|38.16|39.17|33.59|34.54|32.64|47.64|14.02|27.4|21.15|2.08|35.54|74.28|54.78|75.65*|
-|MiniCPM-2B|52.33|52.6|51.10|51.13|51.07|53.46|50.00|47.31|53.83|10.24|36.87|85.44|68.00|68.25|
+|MiniCPM-2B|52.33|52.6|51.1|51.13|51.07|53.46|50.00|47.31|53.83|10.24|36.87|85.44|68.00|68.25|
 
-**DPO后模型比较：**
+#### MiniCPM-2B-128k Evaluation
 
-|模型|MT-bench|
-|---|---|
-|GPT-4-turbo|9.32|
-|GPT-3.5-turbo|8.39|
-|Mistral-8*7b-Instruct-v0.1|8.30|
-|Claude-2.1|8.18|
-|Zephyr-7B-beta|7.34|
-|**MiniCPM-2B**|**7.25**|
-|Vicuna-33B|7.12|
-|Zephyr-7B-alpha|6.88|
-|LLaMA-2-70B-chat|6.86|
-|Mistral-7B-Instruct-v0.1|6.84|
-|MPT-34B-instruct|6.39|
-
-#### MiniCPM-2B-128k 模型评测
 | Model                               | avg   | avg w/o code&math | passkey | number_string | kv_retrieval | longbook_choice_eng | longbook_qa_chn | longbook_qa_eng | longbook_sum_eng | longdialogue_qa_eng | math_calc | math_find | code_debug | code_run |
 |-------------------------------------|-------|-------------------|---------|---------------|--------------|---------------------|-----------------|-----------------|------------------|---------------------|-----------|-----------|------------|----------|
 | LWM-Text-128k                       | 24.45 | 33.62             | 100     | 97.8          | 0.6          | 28.82               | 15.93           | 14.31           | 9.99             | 1.5                 | 0         | 3.43      | 20.05      | 1        |
@@ -341,7 +322,8 @@ print(model.response("<用户>山东省最高的山是哪座山, 它比黄山高
 | chatglm3-6b-128k                    | 25.58 | 36.57             | 89.93   | 99.66         | 5.2          | 46.29               | 10.7            | 8.38            | 25.91            | 6.5                 | 0         | 8         | 5.33       | 1        |
 | MiniCPM-2.4B-128k                   | 27.32 | 37.68             | 98.31   | 99.83         | 9            | 29.69               | 23.06           | 16.33           | 15.73            | 9.5                 | 0         | 4.29      | 22.08      | 0        |
 
-#### MiniCPM-MoE-8x2B模型评测
+#### MiniCPM-MoE-8x2B Evaluation
+
 <div align="left">
 
 <table style="margin: 0px auto;">
@@ -443,9 +425,10 @@ print(model.response("<用户>山东省最高的山是哪座山, 它比黄山高
 
 <p id="4"></p>
 
-注：* 表示结果取自技术报告。&dagger; 表示评测集为MBPP全集。
+Note：* means evaluation results are directly taken from their technical reports. &dagger; means evaluation results on the full set of
+MBPP, instead of the hand-verified set.
 
-#### 多模态模型评测
+#### Multimodal evaluation
 
 <div align="center">
 
@@ -676,57 +659,71 @@ print(model.response("<用户>山东省最高的山是哪座山, 它比黄山高
 </table>
 
 </div>
-* 我们自己评测了正式开源的模型权重。
+* We evaluate the officially released checkpoint by ourselves.
 
+#### DPO evaluation
 
+|Model|MT-bench|
+|---|---|
+|GPT-4-turbo|9.32|
+|GPT-3.5-turbo|8.39|
+|Mistral-8*7b-Instruct-v0.1|8.30|
+|Claude-2.1|8.18|
+|Zephyr-7B-beta|7.34|
+|**MiniCPM-2B**|**7.25**|
+|Vicuna-33B|7.12|
+|Zephyr-7B-alpha|6.88|
+|LLaMA-2-70B-chat|6.86|
+|Mistral-7B-Instruct-v0.1|6.84|
+|MPT-34B-instruct|6.39|
 
 <p id="4"></p>
 
-## 手机部署
+## Deployment on mobile phones
 
-#### 部署步骤
+#### Tutorial
 
-* 进行Int4量化后，MiniCPM只占2GB空间，具备在端侧手机进行模型部署的条件。
-* 对于不同的操作系统，我们进行了不同的适配。
-* **注意：当前开源框架对手机支持还在完善，并非所有芯片与操作系统版本均能成功运行MLC-LLM或LLMFarm。**
-* Android、HarmonyOS
-  * 使用开源框架MLC-LLM进行模型适配。
-  * 支持文本模型、多模态模型。
-  * 适用于MiniCPM-2B-SFT-INT4、MiniCPM-2B-DPO-INT4、MiniCPM-V。
-  * [编译安装MiniCPM指南](https://github.com/OpenBMB/mlc-MiniCPM) 
-* iOS
-  * 使用开源框架LLMFarm进行模型适配。
-  * 支持文本模型。
-  * 适用于MiniCPM-2B-SFT-INT4、MiniCPM-2B-DPO-INT4。
-  * [编译安装MiniCPM指南](https://github.com/OpenBMB/LLMFarm)
+- After INT4 quantization, MiniCPM only occupies 2GB of space, meeting the requirements of inference on end devices.
+- We have made different adaptations for different operating systems.
+- **Note: The current open-source framework is still improving its support for mobile phones, and not all chips and operating system versions can successfully run MLC-LLM or LLMFarm.**
+- Android, HarmonyOS
+  - Adapt based on open-source framework MLC-LLM.
+  - Adapted for text model MiniCPM, and multimodel model MiniCPM-V.
+  - Support MiniCPM-2B-SFT-INT4, MiniCPM-2B-DPO-INT4, and MiniCPM-V.
+  - [Compile and Installation Guide](https://github.com/OpenBMB/mlc-MiniCPM/blob/main/README.md)
+- iOS
+  - Adapt based on open-source framework LLMFarm.
+  - Adapted for text model MiniCPM.
+  - Support MiniCPM-2B-SFT-INT4, MiniCPM-2B-DPO-INT4.
+  - [Compile and Installation Guide](https://github.com/OpenBMB/LLMFarm)
 
-#### 部署性能
+#### Performance
 
-* 我们未针对手机推理模型进行深度优化和系统测试，仅验证MiniCPM使用手机芯片进行推理的可行性。**我们也欢迎更多开发者进一步调优并更新下面的测试列表，不断提升端侧大模型在手机上的推理性能**。
+- We did not conduct in-depth optimization and system testing on the mobile inference model, only verifying the feasibility of MiniCPM using mobile phone chips for inference. **We welcome more developers to continuously improve the inference performance of LLMs on mobile phones and update the test results below.**
 
-|手机型号|操作系统|处理器|Memory（GB）|文本吞吐（token/s）|
-|-|-|-|-|-|
-|OPPO Find N3|Android 13|snapdragon 8 Gen2|12|6.5|
-|Samsung S23 Ultra|Android 14|snapdragon 8 Gen2|12|6.4|
-|Meizu M182Q|Android 11|snapdragon 888Plus|8|3.7|
-|Xiaomi 12 Pro|Android 13|snapdragon 8 Gen1|8+3|3.7|
-|Xiaomi Redmi K40|Android 11|snapdragon 870|8|3.5|
-|Oneplus LE 2100|Android 13|snapdragon 870|12|3.5|
-|Oneplus HD1900|Android 11|snapdragon 865|8|3.2|
-|Oneplus HD1900|Android 11|snapdragon 855|8|3.0|
-|Oneplus HD1905|Android 10|snapdragon 855|8|3.0|
-|Oneplus HD1900|Android 11|snapdragon 855|8|3.0|
-|Xiaomi MI 8|Android 9|snapdragon 845|6|2.3|
-|Huawei Nova 11SE|HarmonyOS 4.0.0|snapdragon 778|12|1.9|
-|Xiaomi MIX 2|Android 9|snapdragon 835|6|1.3|
-|iPhone 15 Pro|iOS 17.2.1|A17 pro|8|18.0|
-|iPhone 15|iOS 17.2.1|A16|6|15.0|
-|iPhone 12 Pro|iOS 16.5.1|A14|6|5.8|
-|iPhone 12|iOS 17.2.1|A14|4|5.8|
-|iPhone 11|iOS 16.6|A13|4|4.6|
-|Xiaomi Redmi K50|HyperOS 1.0.2|MediaTek Dimensity 8100|12|3.5
+| Mobile Phones     | OS            | Processor          | Memory（GB） | Inference Throughput（token/s） |
+| ----------------- | ------------- | ------------------ | ------------ | ------------------------------- |
+| OPPO Find N3      | Android 13    | snapdragon 8 Gen2  | 12           | 6.5                             |
+| Samsung S23 Ultra | Android 14    | snapdragon 8 Gen2  | 12           | 6.4                             |
+| Meizu M182Q       | Android 11    | snapdragon 888Plus | 8            | 3.7                             |
+| Xiaomi 12 Pro     | Android 13    | snapdragon 8 Gen1  | 8+3          | 3.7                             |
+| Xiaomi Redmi K40  | Android 11    | snapdragon 870     | 8            | 3.5                             |
+| Oneplus LE 2100   | Android 13    | snapdragon 870     | 12           | 3.5                             |
+| Oneplus HD1900    | Android 11    | snapdragon 865     | 8            | 3.2                             |
+| Oneplus HD1900    | Android 11    | snapdragon 855     | 8            | 3.0                             |
+| Oneplus HD1905    | Android 10    | snapdragon 855     | 8            | 3.0                             |
+| Oneplus HD1900    | Android 11    | snapdragon 855     | 8            | 3.0                             |
+| Xiaomi MI 8       | Android 9     | snapdragon 845     | 6            | 2.3                             |
+| Huawei Nova 11SE  | HarmonyOS 4.0.0 | snapdragon 778     | 12           | 1.9                             |
+| Xiaomi MIX 2      | Android 9     | snapdragon 835     | 6            | 1.3                             |
+| iPhone 15 Pro     | iOS 17.2.1    | A16                | 8            | 18.0                            |
+| iPhone 15         | iOS 17.2.1    | A16                | 6            | 15.0                            |
+| iPhone 12 Pro     | iOS 16.5.1    | A14                | 6            | 5.8                             |
+| iPhone 12         | iOS 17.2.1    | A14                | 4            | 5.8                             |
+| iPhone 11         | iOS 16.6      | A13                | 4            | 4.6                             |
+|Xiaomi Redmi K50   | HyperOS 1.0.2 | MediaTek Dimensity 8100 |12 |3.5|
 
-* 我们也使用MLC-LLM验证了在手机上部署MiniCPM-V系列模型的可行性，能够正常输入输出，但也存在图片处理时间较长的问题，需要进一步优化，兼容性问题也需要进一步解决。下面的动图是使用小米14 Pro运行MiniCPM-V 2.0的屏幕录像，没有进行任何编辑。
+- We have also verified the feasibility of deploying MiniCPM-V series models on mobile phones based on MLC-LLM, and it can input and output normally. However, there also exist a problem of long image processing time, which needs further optimization. The demo video below is the raw screen recording on a Xiaomi 14 Pro without edition.
 
 <table align="center">
     <p align="center">
@@ -735,14 +732,13 @@ print(model.response("<用户>山东省最高的山是哪座山, 它比黄山高
     </p>
 </table>
 
-
 <p id="5"></p>
 
-## Demo & API 部署
+## Demo & API
 
-#### 基于Gradio的网页版Demo
+#### Web-demo based on Gradio
 
-* 使用如下命令启动基于Gradio的网页版demo：
+Using the following command can launch the gradio-based demo.
 
 ```shell
 # generation powered by vllm
@@ -753,22 +749,25 @@ python demo/hf_based_demo.py --model_path <hf_repo_path>
 
 <p id="6"></p>
 
-## 二次开发
+## Fine-tuning
 
-* 高效参数微调
-  * 一张1080/2080可实现高效参数微调
-  * [高效参数微调代码](https://github.com/OpenBMB/MiniCPM/tree/main/finetune)
+- Parameter-efficient Tuning
+  - With parameter-efficient tuning, we can tune MiniCPM using one piece of NVIDIA GeForce GTX 1080/2080.
+  - [Code for Parameter-efficient Tuning](https://github.com/OpenBMB/MiniCPM/tree/main/finetune)
   
-* 全参数微调 or 持续训练
-  * 使用[BMTrain](https://github.com/OpenBMB/BMTrain)，借助重计算和ZeRO-3，一张3090/4090可实现全参数微调，一台机器可实现持续训练
-  * 相关代码也将陆续推出
+- Full-parameter Tuning
+  - Using [BMTrain](https://github.com/OpenBMB/BMTrain)，as well as checkpointing and ZeRO-3 (zero redundancy optimizer)，we can tune all parameters of MiniCPM using one piece of NVIDIA GeForce GTX 3090/4090.
+  - This code will be available soon.
 
-* mlx高效参数微调
-  * 环境准备
+- mlx Parameter-efficient Tuning
+  - environment preparation
+
     ```shell
     pip install -r finetune/requirements_mlx.txt
     ```
-  * 微调命令
+
+  - finetune
+
     ```shell
     # train
     python mlx_finetune.py --model MiniCPM-2B-sft-bf16-llama-format-mlx  --data data/AdvertiseGen  --train  --seed 2024 --iters 500
@@ -776,78 +775,71 @@ python demo/hf_based_demo.py --model_path <hf_repo_path>
     python mlx_finetune.py --model MiniCPM-2B-sft-bf16-llama-format-mlx  --data data/AdvertiseGen  --test --seed 2024
     ```
 
-
 <p id="9"></p>
 
-## 典型示例
+## Show Cases
 
-#### 文本生成
+#### Text Generation
 
-![内容创作-case1](./assets/creation.case1.png)
+![内容创作-case1](./assets/en.creation.case1.png)
 
-![内容创作-case2](./assets/creation.case2.png)
+![内容创作-case2](./assets/en.creation.case2.png)
 
-![内容创作-case3](./assets/creation.case3.png)
+#### Code Generation
 
-#### 代码生成
+![代码生成-case1](./assets/en.code.case1.gif)
 
-![代码生成-case1](./assets/code.case1.gif)
+#### Reasoning
 
-![代码生成-case2](./assets/code.case2.gif)
+![数理逻辑-case1](./assets/en.math.case1.png)
 
-#### 数理逻辑
+![数理逻辑-case2](./assets/en.math.case2.png)
 
-![数理逻辑-case1](./assets/math.case1.png)
+#### Translation
 
-![数理逻辑-case1](./assets/math.case2.png)
+![文本翻译-case1](./assets/en.translation.case1.png)
 
-#### 文本翻译
+#### Instruction Following
 
-![文本翻译-case1](./assets/translation.case1.png)
+![指令跟随-case1](./assets/en.instruction_following.case1.png)
 
-![文本翻译-case2](./assets/translation.case2.png)
+#### Special characters
 
-#### 指令跟随
+![指令跟随-case1](./assets/en.special_char.case1.png)
 
-![指令跟随-case1](./assets/instruction_following.case1.png)
-
-![指令跟随-case1](./assets/instruction_following.case2.png)
-
-#### 特殊字符
-
-![特殊字符-case1](./assets/special_char.case1.png)
-
-![特殊字符-case2](./assets/special_char.case2.png)
-
+![指令跟随-case2](./assets/en.special_char.case2.png)
 
 <p id="7"></p>
 
-## 开源协议
+## LICENSE
 
-#### 模型协议
+#### Model LICENSE
 
-* 本仓库中代码依照 [Apache-2.0](https://github.com/OpenBMB/MiniCPM/blob/main/LICENSE) 协议开源
-* MiniCPM 模型权重的使用则需要遵循 [“通用模型许可协议-来源说明-宣传限制-商业授权”](https://github.com/OpenBMB/General-Model-License/blob/main/%E9%80%9A%E7%94%A8%E6%A8%A1%E5%9E%8B%E8%AE%B8%E5%8F%AF%E5%8D%8F%E8%AE%AE-%E6%9D%A5%E6%BA%90%E8%AF%B4%E6%98%8E-%E5%AE%A3%E4%BC%A0%E9%99%90%E5%88%B6-%E5%95%86%E4%B8%9A%E6%8E%88%E6%9D%83.md)。
-* MiniCPM 模型权重对学术研究完全开放。
-* 如需将模型用于商业用途，请联系cpm@modelbest.cn来获取书面授权，在登记后亦允许免费商业使用。
+- This repository is released under the [Apache-2.0](https://github.com/OpenBMB/MiniCPM/blob/main/LICENSE) License.
+- The usage of MiniCPM model weights must strictly follow [the General Model License (GML)](https://github.com/OpenBMB/General-Model-License/blob/main/%E9%80%9A%E7%94%A8%E6%A8%A1%E5%9E%8B%E8%AE%B8%E5%8F%AF%E5%8D%8F%E8%AE%AE-%E6%9D%A5%E6%BA%90%E8%AF%B4%E6%98%8E-%E5%AE%A3%E4%BC%A0%E9%99%90%E5%88%B6-%E5%95%86%E4%B8%9A%E6%8E%88%E6%9D%83.md).
+- The models and weights of MiniCPM are completely free for academic research.
+- If you intend to utilize the model for commercial purposes, please reach out to <cpm@modelbest.cn> to obtain the certificate of authorization.
 
-#### 声明
+#### Statement
 
-* 作为一个语言模型，MiniCPM 通过学习大量的文本来生成内容，但它无法理解、表达个人观点或价值判断，它所输出的任何内容都不代表模型开发者的观点和立场。
-* 因此用户在使用 MiniCPM 生成的内容时，应自行负责对其进行评估和验证。
-* 如果由于使用 MiniCPM 开源模型而导致的任何问题，包括但不限于数据安全问题、公共舆论风险，或模型被误导、滥用、传播或不当利用所带来的任何风险和问题，我们将不承担任何责任。
+- As a language model, MiniCPM generates content by learning from a vast amount of text.
+- However, it does not possess the ability to comprehend or express personal opinions or value judgments.
+- Any content generated by MiniCPM does not represent the viewpoints or positions of the model developers.
+- Therefore, when using content generated by MiniCPM, users should take full responsibility for evaluating and verifying it on their own.
 
 <p id="8"></p>
 
-## 工作引用
+## Citation
 
-* 如果觉得MiniCPM有助于您的工作，请引用我们的[论文](https://arxiv.org/abs/2404.06395)
+- Please cite our [paper](https://arxiv.org/abs/2404.06395) if you find our work valuable.
 
 ```
-@article{hu2024minicpm,
-  title={MiniCPM: Unveiling the Potential of Small Language Models with Scalable Training Strategies},
-  author={Hu, Shengding and Tu, Yuge and Han, Xu and He, Chaoqun and Cui, Ganqu and Long, Xiang and Zheng, Zhi and Fang, Yewei and Huang, Yuxiang and Zhao, Weilin and others},
-  journal={arXiv preprint arXiv:2404.06395},
-  year={2024}
+@misc{hu2024minicpm,
+      title={MiniCPM: Unveiling the Potential of Small Language Models with Scalable Training Strategies}, 
+      author={Shengding Hu and Yuge Tu and Xu Han and Chaoqun He and Ganqu Cui and Xiang Long and Zhi Zheng and Yewei Fang and Yuxiang Huang and Weilin Zhao and Xinrong Zhang and Zheng Leng Thai and Kaihuo Zhang and Chongyi Wang and Yuan Yao and Chenyang Zhao and Jie Zhou and Jie Cai and Zhongwu Zhai and Ning Ding and Chao Jia and Guoyang Zeng and Dahai Li and Zhiyuan Liu and Maosong Sun},
+      year={2024},
+      eprint={2404.06395},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
 }
 ```

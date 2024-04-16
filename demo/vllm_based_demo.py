@@ -48,7 +48,7 @@ def vllm_gen(dialog: List, top_p: float, temperature: float, max_dec_len: int):
     assert len(dialog) % 2 == 1
     for info in dialog:
         if info["role"] == "user":
-            prompt += "<用户>" + info["content"]
+            prompt += "<User>" + info["content"]
         else:
             prompt += "<AI>" + info["content"]
     prompt += "<AI>"
